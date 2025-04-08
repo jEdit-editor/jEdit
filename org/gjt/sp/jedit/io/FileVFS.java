@@ -38,8 +38,13 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.text.*;
 import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 
@@ -66,7 +71,29 @@ public class FileVFS extends VFS
 			? CASE_INSENSITIVE_CAP : 0),
 			new String[] { EA_SIZE, EA_MODIFIED, EA_STATUS,
 			EA_TYPE });
+
+		if(OperatingSystem.isWindows()) {
+			EditBus.addToBus(this);
+			updateAdditionalUncServers(null);
+		}
 	} //}}}
+
+	@EBHandler
+	public void updateAdditionalUncServers(PropertiesChanged propertiesChanged)
+	{
+		additionalUncServers.clear();
+		String uncRoots = jEdit.getProperty("vfs.browser.additionalUncRoots", "\\\\wsl$");
+		StringTokenizer st = new StringTokenizer(uncRoots);
+		while(st.hasMoreTokens())
+		{
+			String uncServer = st.nextToken().substring(2);
+			additionalUncServers.add(uncServer);
+			if ("wsl$".equals(uncServer))
+				additionalUncServers.add("wsl.localhost");
+			if ("wsl.localhost".equals(uncServer))
+				additionalUncServers.add("wsl$");
+		}
+	}
 
 	//{{{ getFileName() method
 	@Override
@@ -96,13 +123,14 @@ public class FileVFS extends VFS
 				return FileRootsVFS.PROTOCOL + ':';
 			else if (isUncPath(path)
 					&& (MiscUtilities.getLastSeparatorIndex(path, true) == 1))
-				if ((path.length() >= 5)
-						&& (path.charAt(2) == 'w')
-						&& (path.charAt(3) == 's')
-						&& (path.charAt(4) == 'l'))
+			{
+				int firstSeparatorIndex = MiscUtilities.getFirstSeparatorIndex(path.substring(2));
+				if ((path.length() >= 3)
+						&& additionalUncServers.contains(path.substring(2, firstSeparatorIndex == -1 ? path.length() : firstSeparatorIndex + 2)))
 					return FileRootsVFS.PROTOCOL + ':';
 				else
 					return path;
+			}
 		}
 
 		return super.getParentOfPath(path);
@@ -718,5 +746,6 @@ public class FileVFS extends VFS
 
 	//{{{ Private members
 	private static FileSystemView fsView;
+	private static final List<String> additionalUncServers = new CopyOnWriteArrayList<>();
 	//}}}
 }

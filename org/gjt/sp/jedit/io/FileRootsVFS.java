@@ -34,9 +34,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.jEdit;
 
 import static org.gjt.sp.jedit.MiscUtilities.isUncPath;
 //}}}
@@ -132,7 +134,13 @@ public class FileRootsVFS extends VFS
 			rootsPlus.addAll(Arrays.asList(roots));
 			rootsPlus.addAll(Arrays.asList(fsViewRoots));
 			if(OperatingSystem.isWindows()) {
-				rootsPlus.add(new File("\\\\wsl$"));
+				String uncRoots = jEdit.getProperty("vfs.browser.additionalUncRoots", "\\\\wsl$");
+				StringTokenizer st = new StringTokenizer(uncRoots);
+				while(st.hasMoreTokens())
+				{
+					String uncRoot = st.nextToken();
+					rootsPlus.add(new File(uncRoot));
+				}
 			}
 			return rootsPlus.toArray(new File[0]);
 		}

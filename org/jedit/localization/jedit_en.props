@@ -1936,6 +1936,20 @@ options.browser.general.currentBufferFilter=Filter in file dialogs is \
 options.browser.general.useDefaultIcons=Use default icons
 #}}}
 
+#{{{ Browser Additional UNC Roots
+options.browser.additional-unc-roots.label=Additional UNC Roots
+options.browser.additional-unc-roots.caption=Additional UNC servers that are shown under the roots: file system:
+
+options.browser.additional-unc-roots.add.dialog.title=New UNC Server
+options.browser.additional-unc-roots.add.dialog.message=Which additional UNC server should be shown?
+
+options.browser.additional-unc-roots.format.error.title=Not a UNC Server
+options.browser.additional-unc-roots.format.error.message=The given input is not a valid UNC server, examples are "fileserver.company.com" or "\\\\shares"
+
+options.browser.additional-unc-roots.reset.dialog.title=Reset to Default
+options.browser.additional-unc-roots.reset.dialog.message=Are you sure you want to reset the additional UNC roots to the installation default?
+#}}}
+
 #{{{ Browser Context Menu
 options.browser.custom.context.label=Context menu
 options.browser.custom.context.caption=Custom items in browser right click menu:

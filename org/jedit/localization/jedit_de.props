@@ -1956,6 +1956,20 @@ options.browser.general.currentBufferFilter=Filter in Dateidialogen ist der Typ 
 options.browser.general.useDefaultIcons=Standard-Icons verwenden
 #}}}
 
+#{{{ Browser Additional UNC Roots
+options.browser.additional-unc-roots.label=Zusätzliche UNC Server
+options.browser.additional-unc-roots.caption=Zusätzliche UNC Server die im roots: Dateisystem angezeigt werden:
+
+options.browser.additional-unc-roots.add.dialog.title=Neuer UNC Server
+options.browser.additional-unc-roots.add.dialog.message=Welcher zusätzliche UNC Server soll angezeigt werden?
+
+options.browser.additional-unc-roots.format.error.title=Kein UNC Server
+options.browser.additional-unc-roots.format.error.message=Der eingegebene Text ist kein valider UNC Server, Beispiele sind "fileserver.company.com" oder "\\\\shares"
+
+options.browser.additional-unc-roots.reset.dialog.title=Zurücksetzen
+options.browser.additional-unc-roots.reset.dialog.message=Sollen die zusätzlichen UNC Server wirklich auf die Standardeinträge zurückgesetzt werden?
+#}}}
+
 #{{{ Browser Context Menu
 options.browser.custom.context.label=Kontextmenü
 options.browser.custom.context.caption=Eigene Einträge im Kontextmenü des Dateisystem-Browsers:

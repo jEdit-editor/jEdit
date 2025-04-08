@@ -800,7 +800,7 @@ options.groups=jedit browser
 options.group.jedit=general abbrevs appearance context docking editing \
 	encodings gutter large-files mouse plugin-manager firewall save-back \
 	shortcuts status syntax textarea toolbar view
-options.group.browser=browser.general browser.colors browser.custom.context
+options.group.browser=browser.general browser.colors browser.custom.context browser.additional-unc-roots
 #}}}
 
 #{{{ General pane
@@ -929,13 +929,10 @@ view.fracFontMetrics=false
 #}}}
 
 #{{{ File System Browser panes
-options.browser.colors.code=new BrowserColorsOptionPane();
-
 options.browser.general.code=new BrowserOptionPane();
-#}}}
-
-#{{{ Browser Context Menu
+options.browser.colors.code=new BrowserColorsOptionPane();
 options.browser.custom.context.code=new BrowserContextOptionPane();
+options.browser.additional-unc-roots.code=new BrowserAdditionalUncRootsOptionPane()
 #}}}
 
 #}}}

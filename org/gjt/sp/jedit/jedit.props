@@ -494,6 +494,8 @@ vfs.browser.colors.8.glob=*.{props,properties}
 vfs.browser.colors.8.color=#666666
 
 browser.custom.context=
+
+vfs.browser.additionalUncRoots=\\\\wsl$
 #}}}
 
 #{{{ Plugin manager settings

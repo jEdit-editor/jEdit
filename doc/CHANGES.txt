@@ -105,6 +105,9 @@ for contributing to this release.
 
 - Show local WSL network share under roots: file system (Björn Kautler)
 
+- Allow to configure additional UNC server to be shown under the roots: file
+  system in the file system browser on Windows (Björn Kautler)
+
 }}}
 {{{ API Changes
 

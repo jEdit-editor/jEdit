@@ -24,6 +24,7 @@
 
 package org.jedit.options;
 
+import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.OptionGroup;
 import org.gjt.sp.jedit.jEdit;
 
@@ -65,13 +66,14 @@ public class GlobalOptionGroup extends OptionGroup
 			}
 			else if ("browser".equals(group))
 			{
-				def = "browser.general browser.colors browser.custom.context";
+				def = "browser.general browser.colors browser.custom.context browser.additional-unc-roots";
 			}
 			String optionPanes = jEdit.getProperty(paneList, def);
 			String[] panes = optionPanes.split(" ");
 			for (String pane : panes)
 			{
-				optionGroup.addOptionPane(pane);
+				if (OperatingSystem.isWindows() || !"browser.additional-unc-roots".equals(pane))
+					optionGroup.addOptionPane(pane);
 			}
 			addGroup(optionGroup);
 		}
