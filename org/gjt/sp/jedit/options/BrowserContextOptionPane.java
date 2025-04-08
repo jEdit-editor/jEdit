@@ -28,36 +28,11 @@ import org.gjt.sp.jedit.jEdit;
  * Right-click context menu editor.
  *
  * @author Matthieu Casanova
- * @version $Id$
  */
 public class BrowserContextOptionPane extends AbstractContextOptionPane
 {
-
 	public BrowserContextOptionPane()
 	{
-		super("browser.custom.context", jEdit.getProperty("options.browser.context.caption"));
+		super("browser.custom.context", jEdit.getProperty("options.browser.custom.context.caption"), "browser.custom.context");
 	}
-
-	/**
-	 * Returns jEdit's context menu configuration.
-	 *
-	 * @since jEdit 4.3pre13
-	 */
-	@Override
-	protected String getContextMenu()
-	{
-		return jEdit.getProperty("browser.custom.context");
-	}
-
-	/**
-	 * Saves jEdit's context menu configuration.
-	 *
-	 * @since jEdit 4.3pre13
-	 */
-	@Override
-	protected void saveContextMenu(String menu)
-	{
-		jEdit.setProperty("browser.custom.context", menu);
-	}
-
 }

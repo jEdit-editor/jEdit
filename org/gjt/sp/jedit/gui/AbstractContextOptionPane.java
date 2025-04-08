@@ -38,13 +38,10 @@ import org.gjt.sp.util.StandardUtilities;
  *
  * @author Slava Pestov
  * @author Marcelo Vanzin
- * @version $Id$
  * @since jEdit 4.3pre13
  */
 public abstract class AbstractContextOptionPane extends AbstractOptionPane
 {
-	private final ActionContext actionContext;
-
 	/**
 	 * Constructor that takes a name as an argument, for use by
 	 * subclasses.
@@ -53,26 +50,62 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 	 * @param caption String to use as the caption of the context menu
 	 *                configuration list.
 	 * @since jEdit 4.3pre13
+	 * @deprecated As of jEdit 5.8pre1, replaced by {@link #AbstractContextOptionPane(String, String, String)}
 	 */
+	@Deprecated
 	protected AbstractContextOptionPane(String name, String caption)
 	{
-		this(name, caption, jEdit.getActionContext());
+		this(name, caption, "view.context", jEdit.getActionContext());
 	}
 
 	/**
 	 * Constructor that takes a name as an argument, for use by
 	 * subclasses.
 	 *
-	 * @param name    Name of the option pane.
-	 * @param caption String to use as the caption of the context menu
-	 *                configuration list.
-	 * @param actionContext the actionContext
-	 * @since jEdit 4.5pre1
+	 * @param name           Name of the option pane.
+	 * @param caption        String to use as the caption of the context menu
+	 *                       configuration list.
+	 * @param contextMenuKey Property key for the context menu configuration
+	 * @since jEdit 5.8pre1
 	 */
+	protected AbstractContextOptionPane(String name, String caption, String contextMenuKey)
+	{
+		this(name, caption, contextMenuKey, jEdit.getActionContext());
+	}
+
+	/**
+	 * Constructor that takes a name as an argument, for use by
+	 * subclasses.
+	 *
+	 * @param name          Name of the option pane.
+	 * @param caption       String to use as the caption of the context menu
+	 *                      configuration list.
+	 * @param actionContext The actionContext
+	 * @since jEdit 4.5pre1
+	 * @deprecated As of jEdit 5.8pre1, replaced by {@link #AbstractContextOptionPane(String, String, String, ActionContext)}
+	 */
+	@Deprecated
 	protected AbstractContextOptionPane(String name, String caption, ActionContext actionContext)
+	{
+		this(name, caption, "view.context", actionContext);
+	}
+
+	/**
+	 * Constructor that takes a name as an argument, for use by
+	 * subclasses.
+	 *
+	 * @param name           Name of the option pane.
+	 * @param caption        String to use as the caption of the context menu
+	 *                       configuration list.
+	 * @param contextMenuKey Property key for the context menu configuration
+	 * @param actionContext  The actionContext
+	 * @since jEdit 5.8pre1
+	 */
+	protected AbstractContextOptionPane(String name, String caption, String contextMenuKey, ActionContext actionContext)
 	{
 		super(name);
 		this.actionContext = actionContext;
+		this.contextMenuKey = contextMenuKey;
 		this.caption = new JLabel(caption);
 	}
 
@@ -137,14 +170,25 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 	 *
 	 * @since jEdit 4.3pre13
 	 */
-	protected abstract String getContextMenu();
+	/**
+	 * Returns jEdit's context menu configuration.
+	 *
+	 * @since jEdit 4.3pre13
+	 */
+	protected String getContextMenu()
+	{
+		return jEdit.getProperty(contextMenuKey);
+	}
 
 	/**
 	 * Saves the context menu configuration.
 	 *
 	 * @since jEdit 4.3pre13
 	 */
-	protected abstract void saveContextMenu(String menu);
+	protected void saveContextMenu(String menu)
+	{
+		jEdit.setProperty(contextMenuKey, menu);
+	}
 
 	/**
 	 * Adds a widget to the "buttons" panel at the bottom. The component
@@ -187,6 +231,8 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 	private JButton remove;
 	private JButton moveUp, moveDown;
 	private JButton reset;
+	private final ActionContext actionContext;
+	private final String contextMenuKey;
 	private final JLabel caption;
 	private JPanel buttons;
 
@@ -314,10 +360,10 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 					// so we need to modify the list, not the actual property
 					// since the default value is not available, 
 					// we reset, fetch default value and re-set to original
-					String orgContext = jEdit.getProperty("view.context");
-					jEdit.resetProperty("view.context");
-					String defaultContext = jEdit.getProperty("view.context");
-					jEdit.setProperty("view.context", orgContext);
+					String orgContext = jEdit.getProperty(contextMenuKey);
+					jEdit.resetProperty(contextMenuKey);
+					String defaultContext = jEdit.getProperty(contextMenuKey);
+					jEdit.setProperty(contextMenuKey, orgContext);
 					reloadContextList(defaultContext);
 
 					// reset selection if user had more buttons than default

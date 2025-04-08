@@ -39,7 +39,7 @@ public class ContextOptionPane extends AbstractContextOptionPane
 	
 	public ContextOptionPane()
 	{
-		super("context", jEdit.getProperty("options.context.caption"));
+		super("context", jEdit.getProperty("options.context.caption"), "view.context");
 	}
 	
 	@Override
@@ -54,17 +54,6 @@ public class ContextOptionPane extends AbstractContextOptionPane
 	}
 
 	/**
-	 * Returns jEdit's context menu configuration.
-	 *
-	 * @since jEdit 4.3pre13
-	 */
-	@Override
-	protected String getContextMenu()
-	{
-		return jEdit.getProperty("view.context");
-	}
-
-	/**
 	 * Saves jEdit's context menu configuration.
 	 *
 	 * @since jEdit 4.3pre13
@@ -72,7 +61,7 @@ public class ContextOptionPane extends AbstractContextOptionPane
 	@Override
 	protected void saveContextMenu(String menu)
 	{
-		jEdit.setProperty("view.context", menu);
+		super.saveContextMenu(menu);
 		jEdit.setBooleanProperty(
 			"options.context.includeOptionsLink",
 			includeOptionsLink.isSelected());

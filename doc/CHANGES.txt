@@ -81,6 +81,9 @@ for contributing to this release.
 
 - Restore lost search indexing error title and message (Björn Kautler)
 
+- Correct the result when using the reset button in the custom context menu
+  option pane for the file system browser (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
@@ -132,6 +135,11 @@ for contributing to this release.
   (Björn Kautler)
 
 - Added MiscUtilities.isUncPath to determine whether a given path is a UNC path
+  (Björn Kautler)
+
+- The previous AbstractContextOptionPane constructors are now deprecated; the
+  reset button in that class always restored the view context menu for all
+  subclasses, in the new constructors the property key has to be specified
   (Björn Kautler)
 
 }}}
