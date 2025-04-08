@@ -390,7 +390,8 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		{
 			this.dirEntry = dirEntry;
 			this.level = level;
-			this.extension = MiscUtilities.getFileExtension(dirEntry.getName());
+			if (dirEntry.getType() == VFSFile.FILE)
+				this.extension = MiscUtilities.getFileExtension(dirEntry.getName());
 		}
 		
 		

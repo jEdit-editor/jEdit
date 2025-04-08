@@ -76,6 +76,9 @@ for contributing to this release.
 
 - Fix listing of UNC paths without a given share (Björn Kautler)
 
+- Do not consider a directory with dot to have an extension in file system
+  browser, for example when sorting by type (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
