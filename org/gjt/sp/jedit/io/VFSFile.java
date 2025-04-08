@@ -37,6 +37,8 @@ import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
 
 import javax.swing.*;
+
+import static org.gjt.sp.jedit.MiscUtilities.getFileExtension;
 //}}}
 
 /**
@@ -417,7 +419,11 @@ public class VFSFile implements Serializable
 			switch(getType())
 			{
 			case FILE:
-				return jEdit.getProperty("vfs.browser.type.file");
+				String extension = getFileExtension(path);
+				if (extension.isEmpty())
+					return jEdit.getProperty("vfs.browser.type.file");
+				else
+					return jEdit.getProperty("vfs.browser.type.file") + " (" + extension + ')';
 			case DIRECTORY:
 				return jEdit.getProperty("vfs.browser.type.directory");
 			case FILESYSTEM:

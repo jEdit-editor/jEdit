@@ -99,6 +99,10 @@ for contributing to this release.
 - When sorting by type in the file system browser, first sort by type and then
   by file extension instead of ignoring the type (Björn Kautler)
 
+- Add the file extension in the file system browser type column, for easier
+  seeing a file's type and to make it more obvious and intuitive that sorting
+  by type column sorts also by file extension (Björn Kautler)
+
 }}}
 {{{ API Changes
 
