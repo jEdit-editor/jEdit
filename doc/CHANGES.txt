@@ -69,6 +69,9 @@ for contributing to this release.
 - Show the correct type for shell folders and file systems in the file system
   browser (Björn Kautler)
 
+- Show the correct system icons for file roots if the default icons option is
+  not enabled (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

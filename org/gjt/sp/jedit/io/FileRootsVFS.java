@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.io;
 
 //{{{ Imports
 import javax.annotation.Nonnull;
+import javax.swing.Icon;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
 import java.io.File;
@@ -142,6 +143,7 @@ public class FileRootsVFS extends VFS
 			// REMIND: calling isDirectory() on a floppy drive
 			// displays stupid I/O error dialog box on Windows
 
+			this.file = file;
 			String path = file.getPath();
 			if(OperatingSystem.isWindows()
 					&& (path.length() == 3)
@@ -180,6 +182,16 @@ public class FileRootsVFS extends VFS
 		}
 
 		@Override
+		public Icon getIcon(boolean expanded, boolean openBuffer)
+		{
+			if (icon == null)
+			{
+				icon = fsView.getSystemIcon(file);
+			}
+			return icon;
+		}
+
+		@Override
 		public String getExtendedAttribute(String name)
 		{
 			if(name.equals(EA_TYPE))
@@ -191,5 +203,8 @@ public class FileRootsVFS extends VFS
 				return null;
 			}
 		}
+
+		private final File file;
+		private transient Icon icon;
 	} //}}}
 }
