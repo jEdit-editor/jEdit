@@ -54,7 +54,7 @@ for contributing to this release.
 - Deiconify from tray when necessary like when sending commands to the edit
   server that should show some GUI (Björn Kautler)
 
-- Improve TAB-completion in file system browser dialogs (Björn Kautler)
+- Fix TAB-completion in file system browser dialogs (Björn Kautler)
 
 - Improve type-completion in file system browser dialogs (Björn Kautler)
 

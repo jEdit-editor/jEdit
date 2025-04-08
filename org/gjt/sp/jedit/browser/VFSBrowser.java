@@ -627,6 +627,11 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	//{{{ setDirectory() method
 	public void setDirectory(String path)
 	{
+		setDirectory(path, null);
+	}
+
+	public void setDirectory(String path, Runnable afterAwtPostAction)
+	{
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 		path = MiscUtilities.expandVariables(path);
@@ -638,7 +643,12 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		historyStack.push(path);
 		browserView.saveExpansionState();
 
-		browserView.loadDirectory(null,path,true, this::endRequest);
+		browserView.loadDirectory(null,path,true, () ->
+		{
+			endRequest();
+			if (afterAwtPostAction != null)
+				afterAwtPostAction.run();
+		});
 		this.path = path;
 	} //}}}
 

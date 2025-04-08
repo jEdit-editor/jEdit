@@ -198,6 +198,11 @@ public class VFSFileNameField extends HistoryTextField
 		else
 			dir = "";
 
+		SecondaryLoop secondaryLoop = Toolkit
+				.getDefaultToolkit()
+				.getSystemEventQueue()
+				.createSecondaryLoop();
+
 		if(MiscUtilities.isAbsolutePath(currentText))
 		{
 			if(dir.startsWith("/"))
@@ -206,8 +211,8 @@ public class VFSFileNameField extends HistoryTextField
 			if(dir == null)
 				return;
 
-			browser.setDirectory(dir);
-			TaskManager.instance.waitForIoTasks();
+			browser.setDirectory(dir, secondaryLoop::exit);
+			secondaryLoop.enter();
 
 			if(index == -1)
 			{
@@ -225,8 +230,8 @@ public class VFSFileNameField extends HistoryTextField
 				if(dir == null)
 					return;
 
-				browser.setDirectory(dir);
-				TaskManager.instance.waitForIoTasks();
+				browser.setDirectory(dir, secondaryLoop::exit);
+				secondaryLoop.enter();
 
 				currentText = currentText.substring(index + 1);
 			}
