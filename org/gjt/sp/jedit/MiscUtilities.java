@@ -572,14 +572,14 @@ public class MiscUtilities
 	 */
 	public static boolean isURL(@Nonnull String str)
 	{
-		int fsIndex = getLastSeparatorIndex(str);
+		int fsIndex = getFirstSeparatorIndex(str);
 		if(fsIndex == 0) // /etc/passwd
 			return false;
 		else if(fsIndex == 2) // C:\AUTOEXEC.BAT
 			return false;
 
 		int cIndex = str.indexOf(':');
-		if(cIndex <= 1) // D:\WINDOWS, or doesn't contain : at all
+		if(cIndex <= 1) // D:, or doesn't contain : at all
 			return false;
 
 		String protocol = str.substring(0,cIndex);
