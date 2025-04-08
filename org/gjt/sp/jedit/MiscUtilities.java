@@ -419,11 +419,15 @@ public class MiscUtilities
 	 */
 	public static int getFirstSeparatorIndex(String path)
 	{
-		int start = getPathStart(path);
-		int index = path.indexOf('/',start);
-		if(index == -1)
-			index = path.indexOf(File.separatorChar,start);
-		return index;
+		int sepIndex = path.indexOf(File.separatorChar);
+		int slashIndex = path.indexOf('/');
+		if((sepIndex == -1) && (slashIndex == -1))
+			return -1;
+		if(sepIndex == -1)
+			return slashIndex;
+		if(slashIndex == -1)
+			return sepIndex;
+		return Math.min(sepIndex,slashIndex);
 	} //}}}
 
 	//{{{ getLastSeparatorIndex() method

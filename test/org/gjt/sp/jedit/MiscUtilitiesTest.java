@@ -467,21 +467,21 @@ public class MiscUtilitiesTest
 	public void getFirstSeparatorWindows2() throws Exception
 	{
 		updateOS(WINDOWS_NT);
-		assertEquals(7, MiscUtilities.getFirstSeparatorIndex("c:/yoyo/tata/aaa.txt"));
+		assertEquals(2, MiscUtilities.getFirstSeparatorIndex("c:/yoyo/tata/aaa.txt"));
 	}
 
 	@Test
 	public void getFirstSeparatorWindows3() throws Exception
 	{
-		updateOS(WINDOWS_NT);
-		assertEquals(7, MiscUtilities.getFirstSeparatorIndex("c:\\yoyo/tata/aaa.txt"));
+		assumeTrue("depends on final File.separatorChar", OperatingSystem.isWindows());
+		assertEquals(2, MiscUtilities.getFirstSeparatorIndex("c:\\yoyo/tata/aaa.txt"));
 	}
 
 	@Test
 	public void getFirstSeparatorWindows4() throws Exception
 	{
 		assumeTrue("depends on final File.separatorChar", OperatingSystem.isWindows());
-		assertEquals(7, MiscUtilities.getFirstSeparatorIndex("c:\\yoyo\\tata\\aaa.txt"));
+		assertEquals(2, MiscUtilities.getFirstSeparatorIndex("c:\\yoyo\\tata\\aaa.txt"));
 	}
 
 	@Test

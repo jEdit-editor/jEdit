@@ -54,6 +54,8 @@ for contributing to this release.
 - Deiconify from tray when necessary like when sending commands to the edit
   server that should show some GUI (Björn Kautler)
 
+- Improve TAB-completion in file system browser dialogs (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
@@ -69,6 +71,9 @@ for contributing to this release.
 }}}
 {{{ API Changes
 
+- MiscUtilities.getFirstSeparatorIndex now correctly returns the first separator
+  index; before the separator after the drive letter on windows was ignored
+  and the result on mixed-separator paths were wrong (Björn Kautler)
 
 }}}
 {{{ Editing
