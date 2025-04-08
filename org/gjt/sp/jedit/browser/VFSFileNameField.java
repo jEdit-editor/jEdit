@@ -132,9 +132,9 @@ public class VFSFileNameField extends HistoryTextField
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
 			char ch = evt.getKeyChar();
-			if(ch > 0x20 && ch != 0x7f && ch != 0xff)
+			super.processKeyEvent(evt);
+			if((ch > 0x20 && ch != 0xff) || ch == 0x08)
 			{
-				super.processKeyEvent(evt);
 				String path = getText();
 				BrowserView view = browser.getBrowserView();
 
@@ -155,8 +155,6 @@ public class VFSFileNameField extends HistoryTextField
 				else
 					view.selectNone();
 			}
-			else
-				super.processKeyEvent(evt);
 		}
 	} //}}}
 
