@@ -348,11 +348,12 @@ public abstract class VFS
 		// paths like /foo/bar/
 		int index = MiscUtilities.getLastSeparatorIndex(path, true);
 		if(index == -1)
-		{
-			// this ensures that getFileParent("protocol:"), for
-			// example, is "protocol:" and not "".
-			index = path.lastIndexOf(':');
-		}
+			// this ensures that getFileParent("protocol://"), for
+			// example, is "protocol://", otherwise we end up with
+			// protocol:
+			//   protocol:
+			//     file
+			return path;
 
 		return path.substring(0,index + 1);
 	} //}}}

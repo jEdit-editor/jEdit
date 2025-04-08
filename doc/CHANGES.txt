@@ -61,6 +61,8 @@ for contributing to this release.
 - Do not show empty root node for UNC paths in parents view of file system
   browser (Björn Kautler)
 
+- Do not show protocol node twice for URL file system (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
