@@ -70,11 +70,17 @@ public class FileVFS extends VFS
 	{
 		if(OperatingSystem.isWindows())
 		{
-			if(path.length() == 2 && path.charAt(1) == ':')
+			if((path.length() == 2)
+					&& (path.charAt(1) == ':'))
 				return FileRootsVFS.PROTOCOL + ':';
-			else if(path.length() == 3 && path.endsWith(":\\"))
+			else if((path.length() == 3)
+					&& (path.charAt(1) == ':')
+					&& ((path.charAt(2) == File.separatorChar) || (path.charAt(2) == '/')))
 				return FileRootsVFS.PROTOCOL + ':';
-			else if(path.startsWith("\\\\") && path.indexOf('\\',2) == -1)
+			else if((path.length() >= 2)
+					&& (((path.charAt(0) == File.separatorChar) && (path.charAt(1) == File.separatorChar))
+						|| ((path.charAt(0) == '/') && (path.charAt(1) == '/')))
+					&& (MiscUtilities.getLastSeparatorIndex(path, true) == 1))
 				return path;
 		}
 

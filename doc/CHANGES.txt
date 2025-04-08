@@ -58,6 +58,9 @@ for contributing to this release.
 
 - Fix type-completion in file system browser dialogs (Björn Kautler)
 
+- Do not show empty root node for UNC paths in parents view of file system
+  browser (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
