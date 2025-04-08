@@ -66,6 +66,9 @@ for contributing to this release.
 - Treat file systems like directories always during sorting in file system
   browser (Björn Kautler)
 
+- Show the correct type for shell folders and file systems in the file system
+  browser (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

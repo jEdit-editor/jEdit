@@ -166,9 +166,9 @@ public class FileRootsVFS extends VFS
 			else if(file.isDirectory())
 			{
 				if(fsView.isFileSystemRoot(file))
-					setType(VFSFile.DIRECTORY);
-				else
 					setType(VFSFile.FILESYSTEM);
+				else
+					setType(VFSFile.DIRECTORY);
 
 				if(OperatingSystem.isMacOS())
 					setName(MiscUtilities.getFileName(path));
