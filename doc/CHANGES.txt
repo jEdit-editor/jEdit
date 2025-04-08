@@ -103,6 +103,10 @@ for contributing to this release.
 - By overriding VFS.isRemotePath a VFS can now declare whether a given path
   should be treated as remote path or not (Björn Kautler)
 
+- A new IOUtilities.closeQuietly overload accepting AutoCloseable was added that
+  unifies the existing three methods into one, deprecating the old methods
+  (Björn Kautler)
+
 }}}
 {{{ Editing
 

@@ -248,12 +248,12 @@ public class IOUtilities
 
 	//{{{ closeQuietly() methods
 	/**
-	 * Method that will close a {@link java.io.Closeable} ignoring it if it is null and ignoring exceptions.
+	 * Method that will close an {@link AutoCloseable} ignoring it if it is null and ignoring exceptions.
 	 *
 	 * @param closeable the closeable to close.
-	 * @since jEdit 4.3pre8
+	 * @since jEdit 5.8pre1
 	 */
-	public static void closeQuietly(@Nullable Closeable closeable)
+	public static void closeQuietly(@Nullable AutoCloseable closeable)
 	{
 		if(closeable != null)
 		{
@@ -272,54 +272,49 @@ public class IOUtilities
 			{
 				closeable.close();
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				//ignore
 			}
 		}
 	}
 
+	/**
+	 * Method that will close a {@link Closeable} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param closeable the closeable to close.
+	 * @since jEdit 4.3pre8
+	 * @deprecated As of jEdit 5.8pre1, replaced by {@link #closeQuietly(AutoCloseable)}
+	 */
+	@Deprecated
+	public static void closeQuietly(@Nullable Closeable closeable)
+	{
+		closeQuietly((AutoCloseable)closeable);
+	}
 
 	/**
 	 * Method that will close an {@link ObjectInput} ignoring it if it is null and ignoring exceptions.
 	 *
 	 * @param in the closeable to close.
 	 * @since jEdit 5.1pre1
+	 * @deprecated As of jEdit 5.8pre1, replaced by {@link #closeQuietly(AutoCloseable)}
 	 */
+	@Deprecated
 	public void closeQuietly(@Nullable ObjectInput in)
 	{
-		if (in != null)
-		{
-			try
-			{
-				in.close();
-			}
-			catch (IOException e)
-			{
-				// ignore
-		}
-		}
+		closeQuietly((AutoCloseable)in);
 	}
-
 
 	/**
 	 * Method that will close an {@link ObjectOutput} ignoring it if it is null and ignoring exceptions.
 	 * @param out the closeable to close.
 	 * @since jEdit 5.1pre1
+	 * @deprecated As of jEdit 5.8pre1, replaced by {@link #closeQuietly(AutoCloseable)}
 	 */
+	@Deprecated
 	public void closeQuietly(@Nullable ObjectOutput out)
 	{
-		if (out != null)
-		{
-			try
-			{
-				out.close();
-			}
-			catch (IOException e)
-			{
-				// ignore
-			}
-		}
+		closeQuietly((AutoCloseable)out);
 	} //}}}
 
 	//{{{ IOUtilities() constructor
