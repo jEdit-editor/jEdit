@@ -139,6 +139,11 @@ public class FileRootsVFS extends VFS
 			// displays stupid I/O error dialog box on Windows
 
 			String path = file.getPath();
+			if(OperatingSystem.isWindows()
+					&& (path.length() == 3)
+					&& (path.charAt(1) == ':')
+					&& ((path.charAt(2) == File.separatorChar) || (path.charAt(2) == '/')))
+				path = path.substring(0,2);
 			setPath(path);
 			setDeletePath(path);
 			setSymlinkPath(path);
