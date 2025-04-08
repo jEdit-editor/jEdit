@@ -34,6 +34,8 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
 
 import org.gjt.sp.util.Log;
+
+import static org.gjt.sp.jedit.MiscUtilities.isUncPath;
 //}}}
 
 /**
@@ -138,11 +140,13 @@ public class VFSFileNameField extends HistoryTextField
 				String path = getText();
 				BrowserView view = browser.getBrowserView();
 
-				if((MiscUtilities.getLastSeparatorIndex(path) == -1)
+				if(((MiscUtilities.getLastSeparatorIndex(path) == -1)
 						&& (!(OperatingSystem.isWindows()
 								&& (path.length() == 2)
 								&& (path.charAt(1) == ':'))
 							|| (browser.getDirectory().equals("roots:"))))
+					|| (OperatingSystem.isWindows() && isUncPath(path) && (MiscUtilities.getLastSeparatorIndex(path) <= 1))
+				)
 				{
 					int mode = browser.getMode();
 					// fix for bug #765507
@@ -176,16 +180,32 @@ public class VFSFileNameField extends HistoryTextField
 		{
 			if(complete.isEmpty())
 				return path;
-			int index = MiscUtilities.getFirstSeparatorIndex(complete);
-			if(index == -1)
-				return path;
+			if(OperatingSystem.isWindows() && isUncPath(complete))
+			{
+				int index = MiscUtilities.getFirstSeparatorIndex(complete.substring(2));
+				if(index == -1)
+					return path;
 
-			String newPath = VFSFile.findCompletion(path,
-				complete.substring(0,index),browser,dirsOnly);
-			if(newPath == null)
-				return null;
-			path = newPath;
-			complete = complete.substring(index + 1);
+				String newPath = VFSFile.findCompletion(path,
+						complete.substring(0,index + 2),browser,dirsOnly);
+				if(newPath == null)
+					return null;
+				path = newPath;
+				complete = complete.substring(index + 3);
+			}
+			else
+			{
+				int index = MiscUtilities.getFirstSeparatorIndex(complete);
+				if(index == -1)
+					return path;
+
+				String newPath = VFSFile.findCompletion(path,
+					complete.substring(0,index),browser,dirsOnly);
+				if(newPath == null)
+					return null;
+				path = newPath;
+				complete = complete.substring(index + 1);
+			}
 		}
 	} //}}}
 
@@ -206,8 +226,12 @@ public class VFSFileNameField extends HistoryTextField
 
 		if(MiscUtilities.isAbsolutePath(currentText))
 		{
-			if(dir.startsWith("/"))
+			boolean uncWithoutShare = OperatingSystem.isWindows() && isUncPath(currentText) && (index == 1);
+			if(uncWithoutShare)
+				dir = currentText;
+			else if(dir.startsWith("/"))
 				dir = dir.substring(1);
+
 			dir = doComplete(VFSBrowser.getRootDirectory(),dir,true);
 			if(dir == null)
 				return;
@@ -220,7 +244,7 @@ public class VFSFileNameField extends HistoryTextField
 				if(currentText.startsWith("/"))
 					currentText = currentText.substring(1);
 			}
-			else
+			else if(!uncWithoutShare)
 				currentText = currentText.substring(index + 1);
 		}
 		else

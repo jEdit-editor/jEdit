@@ -37,6 +37,8 @@ import java.util.Set;
 
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
+
+import static org.gjt.sp.jedit.MiscUtilities.isUncPath;
 //}}}
 
 /**
@@ -129,6 +131,9 @@ public class FileRootsVFS extends VFS
 			Set<File> rootsPlus = new HashSet<>(roots.length + fsViewRoots.length);
 			rootsPlus.addAll(Arrays.asList(roots));
 			rootsPlus.addAll(Arrays.asList(fsViewRoots));
+			if(OperatingSystem.isWindows()) {
+				rootsPlus.add(new File("\\\\wsl$"));
+			}
 			return rootsPlus.toArray(new File[0]);
 		}
 	} //}}}
@@ -165,6 +170,11 @@ public class FileRootsVFS extends VFS
 				setName(path + ' '
 					+ fsView.getSystemDisplayName(file));
 			}
+			else if(OperatingSystem.isWindows() && isUncPath(path))
+			{
+				setType(VFSFile.FILESYSTEM);
+				setName(path);
+			}
 			else if(file.isDirectory())
 			{
 				if(fsView.isFileSystemRoot(file))
@@ -184,9 +194,11 @@ public class FileRootsVFS extends VFS
 		@Override
 		public Icon getIcon(boolean expanded, boolean openBuffer)
 		{
-			if (icon == null)
+			if(icon == null)
 			{
-				icon = fsView.getSystemIcon(file);
+				icon = isUncPath(file.getPath())
+						? getDefaultIcon(expanded,openBuffer)
+						: fsView.getSystemIcon(file);
 			}
 			return icon;
 		}

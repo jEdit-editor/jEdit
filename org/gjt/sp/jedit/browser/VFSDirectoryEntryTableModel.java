@@ -32,6 +32,8 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+
+import static org.gjt.sp.jedit.MiscUtilities.isUncPath;
 //}}}
 
 /**
@@ -488,10 +490,30 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 						sortIgnoreCase);
 			// default: sort by name
 			else
-				result = StandardUtilities.compareStrings(
-					file1.getName(),
-					file2.getName(),
-					sortIgnoreCase);
+			{
+				if(OperatingSystem.isWindows())
+				{
+					boolean file1Unc = isUncPath(file1.getPath());
+					boolean file2Unc = isUncPath(file2.getPath());
+					if(file1Unc && !file2Unc)
+						result = 1;
+					else if(!file1Unc && file2Unc)
+						result = -1;
+					else
+						result = StandardUtilities.compareStrings(
+							file1.getName(),
+							file2.getName(),
+							sortIgnoreCase);
+				}
+				else
+				{
+					result = StandardUtilities.compareStrings(
+							file1.getName(),
+							file2.getName(),
+							sortIgnoreCase);
+				}
+			}
+
 			return sortAscending ? result : -result;
 		}
 	} //}}}

@@ -39,6 +39,7 @@ import org.gjt.sp.util.StandardUtilities;
 import javax.swing.*;
 
 import static org.gjt.sp.jedit.MiscUtilities.getFileExtension;
+import static org.gjt.sp.jedit.MiscUtilities.isUncPath;
 //}}}
 
 /**
@@ -112,7 +113,7 @@ public class VFSFile implements Serializable
 		else if(complete.equals(".."))
 			return MiscUtilities.getParentOfPath(path);
 
-		if(MiscUtilities.isAbsolutePath(complete))
+		if(MiscUtilities.isAbsolutePath(complete) && !(OperatingSystem.isWindows() && isUncPath(complete)))
 		{
 			if(MiscUtilities.isURL(complete))
 				return complete;

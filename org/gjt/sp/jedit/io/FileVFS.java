@@ -94,9 +94,15 @@ public class FileVFS extends VFS
 					&& (path.charAt(1) == ':')
 					&& ((path.charAt(2) == File.separatorChar) || (path.charAt(2) == '/')))
 				return FileRootsVFS.PROTOCOL + ':';
-			else if(isUncPath(path)
+			else if (isUncPath(path)
 					&& (MiscUtilities.getLastSeparatorIndex(path, true) == 1))
-				return path;
+				if ((path.length() >= 5)
+						&& (path.charAt(2) == 'w')
+						&& (path.charAt(3) == 's')
+						&& (path.charAt(4) == 'l'))
+					return FileRootsVFS.PROTOCOL + ':';
+				else
+					return path;
 		}
 
 		return super.getParentOfPath(path);

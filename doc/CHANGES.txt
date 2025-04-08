@@ -103,6 +103,8 @@ for contributing to this release.
   seeing a file's type and to make it more obvious and intuitive that sorting
   by type column sorts also by file extension (Björn Kautler)
 
+- Show local WSL network share under roots: file system (Björn Kautler)
+
 }}}
 {{{ API Changes
 
