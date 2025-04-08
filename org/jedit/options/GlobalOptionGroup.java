@@ -59,13 +59,13 @@ public class GlobalOptionGroup extends OptionGroup
 			String def = "";
 			if ("jedit".equals(group))
 			{
-				def = "general abbrevs appearance context docking editing encodings gutter mouse " +
-					"plugin-manager print firewall save-back shortcuts status syntax textarea " +
+				def = "general abbrevs appearance context docking editing encodings gutter large-files mouse " +
+					"plugin-manager firewall save-back shortcuts status syntax textarea " +
 					"toolbar view";
 			}
 			else if ("browser".equals(group))
 			{
-				def = "browser.general browser.colors";
+				def = "browser.general browser.colors browser.custom.context";
 			}
 			String optionPanes = jEdit.getProperty(paneList, def);
 			String[] panes = optionPanes.split(" ");
