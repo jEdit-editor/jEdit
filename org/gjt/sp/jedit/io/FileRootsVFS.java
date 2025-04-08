@@ -29,7 +29,11 @@ import javax.annotation.Nonnull;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
+
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
 //}}}
@@ -121,10 +125,10 @@ public class FileRootsVFS extends VFS
 			if(fsViewRoots == null)
 				return roots;
 
-			File[] rootsPlus = new File[roots.length + fsViewRoots.length];
-			System.arraycopy(fsViewRoots, 0, rootsPlus, 0, fsViewRoots.length);
-			System.arraycopy(roots, 0, rootsPlus, fsViewRoots.length, roots.length);
-			return rootsPlus;
+			Set<File> rootsPlus = new HashSet<>(roots.length + fsViewRoots.length);
+			rootsPlus.addAll(Arrays.asList(roots));
+			rootsPlus.addAll(Arrays.asList(fsViewRoots));
+			return rootsPlus.toArray(new File[0]);
 		}
 	} //}}}
 
