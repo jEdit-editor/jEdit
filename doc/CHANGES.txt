@@ -56,6 +56,8 @@ for contributing to this release.
 
 - Improve TAB-completion in file system browser dialogs (Björn Kautler)
 
+- Improve type-completion in file system browser dialogs (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 
@@ -74,6 +76,13 @@ for contributing to this release.
 - MiscUtilities.getFirstSeparatorIndex now correctly returns the first separator
   index; before the separator after the drive letter on windows was ignored
   and the result on mixed-separator paths were wrong (Björn Kautler)
+
+- MiscUtilities.getLastSeparatorIndex now correctly returns the last separator
+  index; before the separator after the drive letter on windows was ignored
+  (Björn Kautler)
+
+- MiscUtilities.getLastSeparatorIndex has now an overload that allows to ignore
+  trailing path separators when determining the last separator (Björn Kautler)
 
 }}}
 {{{ Editing

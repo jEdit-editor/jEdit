@@ -439,17 +439,31 @@ public class MiscUtilities
 	 */
 	public static int getLastSeparatorIndex(@Nonnull String path)
 	{
-		int start = getPathStart(path);
-		if(start != 0)
-			path = path.substring(start);
-		int index = Math.max(
-			path.lastIndexOf('/'), path.lastIndexOf(File.separatorChar));
-		if(index == -1)
-			return index;
-		else
-			return index + start;
-	} //}}}
+		return getLastSeparatorIndex(path, false);
+	}
 
+	/**
+	 * Return the last index of either / or the OS-specific file
+	 * separator while optionally ignoring trailing separators.
+	 * @param path The path
+	 * @since jEdit 5.8pre1
+	 */
+	public static int getLastSeparatorIndex(@Nonnull String path, boolean ignoreTrailingSeparators)
+	{
+		int lastIndex = path.length() - 1;
+		if(ignoreTrailingSeparators)
+		{
+			while(lastIndex > 0
+					&& (path.charAt(lastIndex) == File.separatorChar
+					|| path.charAt(lastIndex) == '/'))
+			{
+				lastIndex--;
+			}
+		}
+
+		return Math.max(path.lastIndexOf(File.separatorChar,lastIndex),
+				path.lastIndexOf('/',lastIndex));
+	} //}}}
 
 	//{{{ getFileExtension() method
 	/**
@@ -1567,21 +1581,6 @@ loop:		for(;;)
 			return Character.toUpperCase(ch1) == Character.toUpperCase(ch2);
 		else
 			return ch1 == ch2;
-	} //}}}
-
-	//{{{ getPathStart() method
-	private static int getPathStart(@Nonnull String path)
-	{
-		if(path.startsWith("/"))
-			return 0;
-		else if(OperatingSystem.isWindows()
-			&& path.length() >= 3
-			&& path.charAt(1) == ':'
-			&& (path.charAt(2) == '/'
-			|| path.charAt(2) == '\\'))
-			return 3;
-		else
-			return 0;
 	} //}}}
 
 	//{{{ containsNullCharacter() method

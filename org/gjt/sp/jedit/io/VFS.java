@@ -344,20 +344,9 @@ public abstract class VFS
 	@Nonnull
 	public String getParentOfPath(String path)
 	{
-		// ignore last character of path to properly handle
+		// ignore last character(s) of path to properly handle
 		// paths like /foo/bar/
-		int lastIndex = path.length() - 1;
-		while(lastIndex > 0
-			&& (path.charAt(lastIndex) == File.separatorChar
-			|| path.charAt(lastIndex) == '/'))
-		{
-			lastIndex--;
-		}
-
-		int count = Math.max(0,lastIndex);
-		int index = path.lastIndexOf(File.separatorChar,count);
-		if(index == -1)
-			index = path.lastIndexOf('/',count);
+		int index = MiscUtilities.getLastSeparatorIndex(path, true);
 		if(index == -1)
 		{
 			// this ensures that getFileParent("protocol:"), for
