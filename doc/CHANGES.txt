@@ -72,6 +72,8 @@ for contributing to this release.
 - Show the correct system icons for file roots if the default icons option is
   not enabled (Björn Kautler)
 
+- Properly handle problems during file renaming in file VFS (Björn Kautler)
+
 }}}
 {{{ Miscellaneous
 

@@ -34,6 +34,7 @@ import javax.swing.*;
 
 import java.awt.Component;
 import java.io.*;
+import java.nio.file.Files;
 import java.text.*;
 import java.util.Date;
 
@@ -446,7 +447,7 @@ public class FileVFS extends VFS
 	//{{{ _rename() method
 	@Override
 	public boolean _rename(Object session, String from, String to,
-		Component comp)
+		Component comp) throws IOException
 	{
 		File _to = new File(to);
 
@@ -470,8 +471,7 @@ public class FileVFS extends VFS
 		}
 		else
 		{
-			parent.mkdirs();
-			if(!parent.exists())
+			if(!parent.mkdirs())
 				return false;
 		}
 
@@ -489,12 +489,12 @@ public class FileVFS extends VFS
 
 		// Case-insensitive fs workaround
 		if(!fromCanonPath.equalsIgnoreCase(toCanonPath))
-			_to.delete();
+			Files.delete(_to.toPath());
 
-		boolean retVal = _from.renameTo(_to);
+		Files.move(_from.toPath(), _to.toPath());
 		VFSManager.sendVFSUpdate(this,fromCanonPath,true);
 		VFSManager.sendVFSUpdate(this,toCanonPath,true);
-		return retVal;
+		return true;
 	} //}}}
 
 	//{{{ _mkdir() method
