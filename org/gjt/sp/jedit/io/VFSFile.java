@@ -75,8 +75,8 @@ public class VFSFile implements Serializable
 			{
 				continue;
 			}
-			/* try exact match first */
-			else if(matchAgainst.equals(str))
+			// prefer exact case-sensitive matches
+			if(matchAgainst.equals(str))
 			{
 				return i;
 			}

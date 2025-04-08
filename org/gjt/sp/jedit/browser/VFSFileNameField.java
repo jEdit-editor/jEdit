@@ -34,7 +34,6 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
 
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.TaskManager;
 //}}}
 
 /**
@@ -181,10 +180,8 @@ public class VFSFileNameField extends HistoryTextField
 			if(index == -1)
 				return path;
 
-			/* Until the very last path component, we only complete on
-			directories */
 			String newPath = VFSFile.findCompletion(path,
-				complete.substring(0,index),browser,true);
+				complete.substring(0,index),browser,dirsOnly);
 			if(newPath == null)
 				return null;
 			path = newPath;
@@ -211,7 +208,7 @@ public class VFSFileNameField extends HistoryTextField
 		{
 			if(dir.startsWith("/"))
 				dir = dir.substring(1);
-			dir = doComplete(VFSBrowser.getRootDirectory(),dir,false);
+			dir = doComplete(VFSBrowser.getRootDirectory(),dir,true);
 			if(dir == null)
 				return;
 
@@ -230,7 +227,7 @@ public class VFSFileNameField extends HistoryTextField
 		{
 			if(!dir.isEmpty())
 			{
-				dir = doComplete(browser.getDirectory(),dir,false);
+				dir = doComplete(browser.getDirectory(),dir,true);
 				if(dir == null)
 					return;
 
@@ -272,26 +269,6 @@ public class VFSFileNameField extends HistoryTextField
 		}
 
 		setText(newText);
-	} //}}}
-
-	//{{{ goToParent() method
-	// TODO: remove this, it's never called
-	private void goToParent()
-	{
-		String name = MiscUtilities.getFileName(browser.getDirectory());
-		String parent = MiscUtilities.getParentOfPath(
-			browser.getDirectory());
-		browser.setDirectory(parent);
-
-		VFS vfs = VFSManager.getVFSForPath(parent);
-		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
-		{
-			TaskManager.instance.waitForIoTasks();
-			setText(name);
-			browser.getBrowserView().getTable().doTypeSelect(
-				name,browser.getMode() == VFSBrowser
-				.CHOOSE_DIRECTORY_DIALOG);
-		}
 	} //}}}
 
 	//}}}
