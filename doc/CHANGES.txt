@@ -70,6 +70,8 @@ for contributing to this release.
 - Use HTTPS to download mirror list, plugin list, and plugins
   (#4043 - Björn Kautler)
 
+- jar: URLs on file: URLs are no longer considered remote files (Björn Kautler)
+
 }}}
 {{{ API Changes
 
@@ -83,6 +85,9 @@ for contributing to this release.
 
 - MiscUtilities.getLastSeparatorIndex has now an overload that allows to ignore
   trailing path separators when determining the last separator (Björn Kautler)
+
+- By overriding VFS.isRemotePath a VFS can now declare whether a given path
+  should be treated as remote path or not (Björn Kautler)
 
 }}}
 {{{ Editing

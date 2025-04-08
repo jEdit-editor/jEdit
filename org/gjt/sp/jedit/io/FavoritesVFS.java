@@ -68,6 +68,14 @@ public class FavoritesVFS extends VFS
 		return PROTOCOL + ':';
 	} //}}}
 
+	//{{{ isRemotePath() method
+	@Override
+	public boolean isRemotePath(String path)
+	{
+		String wrappedPath = path.substring(PROTOCOL.length() + 1);
+		return VFSManager.getVFSForPath(wrappedPath).isRemotePath(wrappedPath);
+	} //}}}
+
 	//{{{ _listFiles() method
 	@Override
 	public VFSFile[] _listFiles(Object session, String url,

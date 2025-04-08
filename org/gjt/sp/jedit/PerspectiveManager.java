@@ -323,14 +323,8 @@ public class PerspectiveManager
 		 */
 		public static boolean skipRemote(String uri)
 		{
-			if (jEdit.getBooleanProperty("restore.remote"))
-				return false;
-			if(MiscUtilities.isURL(uri))
-			{
-				String protocol = MiscUtilities.getProtocolOfURL(uri);
-				if (!protocol.equals("file")) return true;
-			}
-			return false;
+			return !jEdit.getBooleanProperty("restore.remote")
+					&& VFSManager.getVFSForPath(uri).isRemotePath(uri);
 		}
 
 		@Override

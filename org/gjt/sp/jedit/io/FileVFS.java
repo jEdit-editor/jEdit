@@ -81,6 +81,13 @@ public class FileVFS extends VFS
 		return super.getParentOfPath(path);
 	} //}}}
 
+	//{{{ isRemotePath() method
+	@Override
+	public boolean isRemotePath(String path)
+	{
+		return false;
+	} //}}}
+
 	//{{{ constructPath() method
 	@Override
 	public String constructPath(String parent, String path)

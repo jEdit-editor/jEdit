@@ -357,6 +357,44 @@ public abstract class VFS
 		return path.substring(0,index + 1);
 	} //}}}
 
+	//{{{ isRemotePath() method
+	/**
+	 * Returns whether the specified path should be treated as remote path.
+	 * This can have effects like not restoring the file on reopening jEdit eventually
+	 * or loading the contents lazily on first view and similar things.
+	 * <p>
+	 * The default implementation always returns {@code true}.
+	 * Subclasses that do not exclusively serve remote files should
+	 * overwrite this method and return an appropriate result.
+	 * VFS that wrap other VFS paths like for example {@code ArchiveVFS}
+	 * should often delegate to the wrapped VFS to determine the result.
+	 * <p>
+	 * Whether a path should be treated as remote path, depends on multiple factors.
+	 * If the path could for example temporarily be inaccessible like an FTP path
+	 * when you are offline or an SQL table when the SQL server could be offline,
+	 * it should probably be treated as remote path. But a "local" path can also be
+	 * inaccessible if a USB stick is detached or a mapped network drive is not available,
+	 * but that does not mean also all local paths should be marked as remote files.
+	 * So you have to use your common sense to decide when to mark a file as remote.
+	 * Another indicator is how long it needs to load a file or fail loading a file.
+	 * If the user has ten files open and restarts jEdit with restoring remote files,
+	 * and each file takes one minute to load or two minutes if it times out,
+	 * then the user waits ten to twenty minutes for jEdit to start up, so the file should
+	 * be marked as remote file, so that it is not restored or is loaded lazily.
+	 * <p>
+	 * Overrides of this method can safely assume that a call to
+	 * {@link VFSManager#getVFSForPath} with the specified path would return an instance
+	 * of the respective subclass where the method is implemented. Supplying any
+	 * other VFS' path as argument here is illegal and leads to undefined behavior.
+	 *
+	 * @param path The path
+	 * @since jEdit 5.8pre1
+	 */
+	public boolean isRemotePath(String path)
+	{
+		return true;
+	} //}}}
+
 	//{{{ constructPath() method
 	/**
 	 * Constructs a path from the specified directory and

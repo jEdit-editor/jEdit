@@ -26,6 +26,8 @@ package org.gjt.sp.jedit.io;
 import java.awt.Component;
 import java.io.*;
 import java.net.*;
+
+import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -113,5 +115,15 @@ public class UrlVFS extends VFS
 			Log.log(Log.ERROR,this,mue);
 			return super.getFilePath(vfsPath);
 		}
+	} //}}}
+
+	//{{{ isRemotePath() method
+	@Override
+	public boolean isRemotePath(String path)
+	{
+		// consider a jar URL on a file URL local,
+		// otherwise URLs are treated as remote by default
+		return !"jar".equals(MiscUtilities.getProtocolOfURL(path))
+				|| !"file".equals(MiscUtilities.getProtocolOfURL(path.substring(4)));
 	} //}}}
 }

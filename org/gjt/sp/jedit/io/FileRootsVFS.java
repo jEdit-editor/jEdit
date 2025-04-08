@@ -59,6 +59,13 @@ public class FileRootsVFS extends VFS
 		return PROTOCOL + ':';
 	} //}}}
 
+	//{{{ isRemotePath() method
+	@Override
+	public boolean isRemotePath(String path)
+	{
+		return false;
+	} //}}}
+
 	//{{{ _listFiles() method
 	@Override
 	public VFSFile[] _listFiles(Object session, String url, Component comp)

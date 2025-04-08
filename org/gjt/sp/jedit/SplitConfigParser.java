@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.gjt.sp.jedit.io.VFSManager;
+
 /** Class used by PerspectiveManager to parse SplitConfig strings.
     May also be used by plugins. 
     @since jEdit 4.4
@@ -217,18 +219,10 @@ public class SplitConfigParser
 
                 public void addBuffer(String s) 
                 {
-                        if (includeFiles) 
-                        {
-                        	if (includeRemotes) 
-                        	{
-                        		buffers.add(s);
-                        		return;
-                        	}
-                                if (!isRemote(s)) 
-                                {
-                                        buffers.add(s);
-                                }
-                        }
+                        if (includeFiles
+                                && (includeRemotes || !VFSManager.getVFSForPath(s).isRemotePath(s)))
+
+                                buffers.add(s);
                 }
 
                 public List<String> getBuffers() 
@@ -272,20 +266,6 @@ public class SplitConfigParser
                         } 
                         sb.append('\"').append(scope).append("\" bufferset");
                         return sb.toString();
-                }
-
-                /**
-                 * @return true if the uri points to a file that is remote, that is, the
-                 * protocol of the give uri is something other than 'file'.
-                 */
-                public boolean isRemote(String uri) 
-                {
-                        if (MiscUtilities.isURL(uri)) 
-                        {
-                                String protocol = MiscUtilities.getProtocolOfURL(uri);
-                                return !protocol.equals("file");
-                        }
-                        return false;
                 }
         }
         //}}}
