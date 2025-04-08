@@ -461,7 +461,7 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 			VFSFile file1 = entry1.dirEntry;
 			VFSFile file2 = entry2.dirEntry;
 
-			if(!sortMixFilesAndDirs)
+			if(!sortMixFilesAndDirs && (sortAttribute != VFS.EA_TYPE))
 			{
 				if(((file1.getType() == VFSFile.FILE) || (file2.getType() == VFSFile.FILE))
 						&& (file1.getType() != file2.getType()))
@@ -476,12 +476,15 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 			// sort by size
 			else if(sortAttribute == VFS.EA_SIZE)
 				result = Long.compare(file1.getLength(), file2.getLength());
-			// sort by type (= extension)
+			// sort by type and extension
 			else if(sortAttribute == VFS.EA_TYPE)
-				result = StandardUtilities.compareStrings(
-					entry1.extension,
-					entry2.extension,
-					sortIgnoreCase);
+				if((file1.getType() != file2.getType()))
+					result = file2.getType() - file1.getType();
+				else
+					result = StandardUtilities.compareStrings(
+						entry1.extension,
+						entry2.extension,
+						sortIgnoreCase);
 			// default: sort by name
 			else
 				result = StandardUtilities.compareStrings(

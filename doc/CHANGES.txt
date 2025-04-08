@@ -93,6 +93,9 @@ for contributing to this release.
 - Show leading path separators in root node of file system browser parents view
   for UNC paths (Björn Kautler)
 
+- When sorting by type in the file system browser, first sort by type and then
+  by file extension instead of ignoring the type (Björn Kautler)
+
 }}}
 {{{ API Changes
 
