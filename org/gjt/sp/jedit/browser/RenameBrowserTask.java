@@ -99,7 +99,7 @@ class RenameBrowserTask extends AbstractBrowserTask
 			setCancellable(false);
 			Log.log(Log.ERROR, this, io);
 			String[] pp = {io.toString()};
-			VFSManager.error(browser, path, "ioerror.directory-error", pp);
+			VFSManager.error(browser, path, "ioerror.rename-error", pp);
 		}
 		finally
 		{
@@ -112,7 +112,7 @@ class RenameBrowserTask extends AbstractBrowserTask
 				setCancellable(false);
 				Log.log(Log.ERROR, this, io);
 				String[] pp = {io.toString()};
-				VFSManager.error(browser, path, "ioerror.directory-error", pp);
+				VFSManager.error(browser, path, "ioerror.rename-error", pp);
 			}
 		}
 	} //}}}
