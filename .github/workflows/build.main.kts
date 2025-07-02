@@ -156,7 +156,7 @@ workflow(
             condition = "${runner.os} == 'macOS'"
         )
 
-        val innoSetupInstaller = "${expr { runner.temp }}/innosetup-6.3.3.exe"
+        val innoSetupInstaller = "${expr { runner.temp }}/innosetup-6.4.3.exe"
 
         val cacheInnoSetupInstaller = uses(
             name = "Cache InnoSetup installer on Linux and macOS",
@@ -169,7 +169,7 @@ workflow(
 
         run(
             name = "Provision InnoSetup on Linux and macOS",
-            command = "wget -O $innoSetupInstaller https://files.jrsoftware.org/is/6/innosetup-6.3.3.exe",
+            command = "wget -O $innoSetupInstaller https://files.jrsoftware.org/is/6/${innoSetupInstaller.substringAfterLast('/')}",
             condition = """
                 ((${runner.os} == 'Linux') || (${runner.os} == 'macOS'))
                 && (${cacheInnoSetupInstaller.outputs.cacheHit} == false)

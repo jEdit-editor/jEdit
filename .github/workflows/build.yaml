@@ -54,12 +54,12 @@ jobs:
       name: 'Cache InnoSetup installer on Linux and macOS'
       uses: 'actions/cache@v4'
       with:
-        path: '${{ runner.temp }}/innosetup-6.3.3.exe'
-        key: 'innosetup-6.3.3.exe'
+        path: '${{ runner.temp }}/innosetup-6.4.3.exe'
+        key: 'innosetup-6.4.3.exe'
       if: '(runner.os == ''Linux'') || (runner.os == ''macOS'')'
     - id: 'step-3'
       name: 'Provision InnoSetup on Linux and macOS'
-      run: 'wget -O ${{ runner.temp }}/innosetup-6.3.3.exe https://files.jrsoftware.org/is/6/innosetup-6.3.3.exe'
+      run: 'wget -O ${{ runner.temp }}/innosetup-6.4.3.exe https://files.jrsoftware.org/is/6/innosetup-6.4.3.exe'
       if: |-
         ((runner.os == 'Linux') || (runner.os == 'macOS'))
         && (steps.step-2.outputs.cache-hit == false)
@@ -71,8 +71,8 @@ jobs:
       name: 'Install InnoSetup on Linux'
       uses: 'Wandalen/wretry.action/main@v3'
       with:
-        command: 'wine ${{ runner.temp }}/innosetup-6.3.3.exe /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART'
-        pre_retry_command: 'echo ::warning::Reexecuting ${{ runner.temp }}/innosetup-6.3.3.exe'
+        command: 'wine ${{ runner.temp }}/innosetup-6.4.3.exe /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART'
+        pre_retry_command: 'echo ::warning::Reexecuting ${{ runner.temp }}/innosetup-6.4.3.exe'
         attempt_limit: '3'
         attempt_delay: '1000'
       env:
@@ -80,7 +80,7 @@ jobs:
       if: 'runner.os == ''Linux'''
     - id: 'step-6'
       name: 'Install InnoSetup on macOS'
-      run: 'wine ${{ runner.temp }}/innosetup-6.3.3.exe /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART'
+      run: 'wine ${{ runner.temp }}/innosetup-6.4.3.exe /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART'
       if: 'runner.os == ''macOS'''
     - id: 'step-7'
       name: 'Configure Git'
