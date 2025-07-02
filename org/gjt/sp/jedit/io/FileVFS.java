@@ -48,6 +48,7 @@ import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.gjt.sp.jedit.MiscUtilities.isUncPath;
 import static org.gjt.sp.util.StandardUtilities.castUnchecked;
 //}}}
@@ -573,11 +574,7 @@ public class FileVFS extends VFS
 			fromCanonPath = from;
 		}
 
-		// Case-insensitive fs workaround
-		if(!fromCanonPath.equalsIgnoreCase(toCanonPath))
-			Files.delete(_to.toPath());
-
-		Files.move(_from.toPath(), _to.toPath());
+		Files.move(_from.toPath(), _to.toPath(), REPLACE_EXISTING);
 		VFSManager.sendVFSUpdate(this,fromCanonPath,true);
 		VFSManager.sendVFSUpdate(this,toCanonPath,true);
 		return true;
