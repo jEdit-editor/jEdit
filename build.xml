@@ -668,6 +668,12 @@
 		       dest="${build.dir}/docbook-xsl/"/>
 	</target>
 
+	<target name="unpack-docbook-xml"
+		depends="init,retrieve">
+		<unzip src="${lib.dir}/docbook/docbook-xml.jar"
+		       dest="${build.dir}/docbook-xml/"/>
+	</target>
+
 	<presetdef name="dependset.build">
 		<dependset>
 			<srcfilelist dir="${basedir}">
@@ -698,6 +704,8 @@
 					location="${build.dir}/docbook-xsl/docbook/html/chunk.xsl"/>
 				<entity publicid="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"
 					location="${build.dir}/docbook-xsl/docbook/fo/docbook.xsl"/>
+				<entity publicid="-//OASIS//DTD DocBook XML V4.4//EN"
+					location="${build.dir}/docbook-xml/docbookx.dtd"/>
 			</xmlcatalog>
 			<sysproperty key="javax.xml.parsers.DocumentBuilderFactory"
 				     value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
@@ -709,7 +717,7 @@
 	</presetdef>
 
 	<target name="generate-doc-faq"
-		depends="init,retrieve,setup,unpack-docbook-xsl">
+		depends="init,retrieve,setup,unpack-docbook-xsl,unpack-docbook-xml">
 		<dependset.html>
 			<srcfileset dir="doc/FAQ"/>
 			<targetfileset dir="${jar.location}/doc/FAQ"/>
@@ -733,7 +741,7 @@
 	</target>
 
 	<target name="generate-doc-news"
-		depends="init,retrieve,setup,unpack-docbook-xsl">
+		depends="init,retrieve,setup,unpack-docbook-xsl,unpack-docbook-xml">
 		<dependset.html>
 			<srcfileset dir="doc/whatsnew"/>
 			<targetfileset dir="${jar.location}/doc/whatsnew"/>
@@ -757,7 +765,7 @@
 	</target>
 
 	<target name="generate-doc-users-guide"
-		depends="init,retrieve,setup,unpack-docbook-xsl">
+		depends="init,retrieve,setup,unpack-docbook-xsl,unpack-docbook-xml">
 		<dependset.html>
 			<srcfileset dir="doc/users-guide"/>
 			<targetfileset dir="${jar.location}/doc/users-guide"/>
@@ -883,7 +891,7 @@
 	</target>
 
 	<target name="generate-pdf-users-guide"
-		depends="init,retrieve,setup,unpack-docbook-xsl">
+		depends="init,retrieve,setup,unpack-docbook-xsl,unpack-docbook-xml">
 		<fail message="Please set the property &quot;paper.type&quot;"
 		      unless="paper.type"/>
 		<contrib:switch value="${paper.type}">
