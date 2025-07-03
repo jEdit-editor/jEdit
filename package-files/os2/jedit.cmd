@@ -2,7 +2,7 @@
  *              Christoph vogt (ch.vogt@gmx.net)
  *              Gili Tzabari (junk@bbs.darktech.org)
  * PLATFORM: OS/2, eCS
- * 
+ *
  * Used to run JEdit 3.1
  */
 
@@ -16,7 +16,7 @@ end
 if (rc = -2) then
   say "Unexpected response to JAVA -VERSION. Assuming newest version is being used."
 
-arguments = "-settings=%HOME%\.jedit -server=%HOME%\.jedit\server"
+arguments = "-settings=%HOME%\.jedit -server=%HOME%\.jedit\server -reuseview"
 jedit_dir = GetExecPath()
 
 if (iMajor = 1 & iMid <= 1) then
@@ -48,7 +48,7 @@ do while i > cQueued
     pull sStr
     if (pos("JAVA VERSION ", sStr) > 0) | (pos("JAVA.EXE VERSION ", sStr) > 0) then
     do
-        do while(queued() > 0) 
+        do while(queued() > 0)
           pull sStrIngore; /* flush input stream */
         end
         parse var sStr sStuff '"'iMajor'.'iMid'.'iMinor'"'

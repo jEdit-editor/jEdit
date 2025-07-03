@@ -99,7 +99,7 @@ General jEdit documentation can be found in the 'doc' directory.
   builds the Java installer in the dist-folder, configured in build.properties.
 
  - dist-mac                build the macOS disk image (DMG-file)
-  builds the macOS internet-enabled disk image (DMG-file) if building on a box
+  builds the macOS disk image (DMG-file) if building on a box
   running macOS. If building on a box running something else, there will be a file
   called jedit<version_here>-dist-mac-finish.tar.bz2 in the dist-folder,
   configured in build.properties. Give that to someone running macOS and ask him
@@ -107,7 +107,7 @@ General jEdit documentation can be found in the 'doc' directory.
   The only thing that needs to be installed for this final step is Apache Ant.
 
  - dist-mac-finish         finish building the macOS disk image (DMG-file) on macOS
-  builds the macOS internet-enabled disk image (DMG-file) in the dist-folder,
+  builds the macOS disk image (DMG-file) in the dist-folder,
   configured in build.properties if building on a box running macOS.
   This target is normally only run directly, if someone just has to do
   the final step that was prepared by "dist-mac" or "dist".
